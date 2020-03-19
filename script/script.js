@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const getData = (url, callback) => {
         const request = new XMLHttpRequest(); //CREATE OBJ FOR REQUEST
-        request.open('POST', url); //SETTING REQUEST
+        request.open('GET', url); //SETTING REQUEST
         request.addEventListener('readystatechange', () => {
             if (request.readyState !== 4) {
                 return;
@@ -82,6 +82,10 @@ document.addEventListener('DOMContentLoaded', () => {
     //CALL FUNCTIONS
     getData(proxy + citiesApi, (data) => {
         city = JSON.parse(data).filter(item => item.name); //FILTER IS NAME
+    });
+
+    getData(proxy + calendar, (data) => {
+        
     });
    
 });
