@@ -60,6 +60,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const renderCheapDay = (cheapTicket) => {
+        console.log('cheapTicket: ', cheapTicket);
+    };
+
+    const renderCheapYear = (cheapTickets) => {//TO DO: sort()
+        console.log('cheapTickets: ', cheapTickets);
+    };
+
+    const renderCheap = (data, date) => {
+        const cheapTicketYear = JSON.parse(data).best_prices;
+        const cheapTicketDay = cheapTicketYear.filter((item) => {
+            return item.depart_date === date;
+        });
+
+        console.log('cheapTicketYear: ', cheapTicketYear);
+        console.log('cheapTicketDay: ', cheapTicketDay);
+
+        renderCheapDay(cheapTicketDay);
+        renderCheapYear(cheapTicketYear);
+    };
+
     //EVENT HEANDLER
     //WHERE FROM
     inputCitiesFrom.addEventListener('input', () => {
@@ -79,13 +100,30 @@ document.addEventListener('DOMContentLoaded', () => {
         selectCity(event, inputCitiesTo, dropdownCitiesTo);
     });
 
+    formSearch.addEventListener('submit', (event) => {
+        event.preventDefault(); //NOT REBOOT PAGE
+        
+        const formData = {
+            from: city.find((item) => inputCitiesFrom.value === item.name).code, //FIND RETURN FIRST EACH
+            to: city.find((item) => inputCitiesTo.value === item.name).code,
+            when: inputDateDepart.value,
+        };
+
+        //const requestData = `?depart_date=${formData.when}&origin=${formData.from}&destination=${formData.to}&one_way=true`;
+        
+        const requestData = '?depart_date=' + formData.when +
+        '&origin=' + formData.from +
+        '&destination=' + formData.to +
+        '&one_way=true';
+
+        getData(calendar + requestData, (response) => {
+            renderCheap(response, formData.when);
+        });
+    });
+
     //CALL FUNCTIONS
     getData(proxy + citiesApi, (data) => {
         city = JSON.parse(data).filter(item => item.name); //FILTER IS NAME
-    });
-
-    getData(proxy + calendar, (data) => {
-        
     });
    
 });
